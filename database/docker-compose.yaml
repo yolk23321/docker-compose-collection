@@ -1,0 +1,41 @@
+version: '3.9'
+
+services:
+  mysql5:
+    image: mysql/mysql-server:5.7
+    container_name: mysql5
+    ports:
+      - "3306:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: password
+    volumes:
+      - mysql5_data:/var/lib/mysql
+      
+  mysql8:
+    image: mysql/mysql-server:8.0
+    container_name: mysql8
+    ports:
+      - "3307:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: password
+    volumes:
+      - mysql8_data:/var/lib/mysql
+
+  postgres:
+    image: postgres:latest
+    container_name: postgres
+    restart: always
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_DB: authing-server
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+volumes:
+  mysql5_data:
+  mysql8_data:
+  postgres_data:
+
