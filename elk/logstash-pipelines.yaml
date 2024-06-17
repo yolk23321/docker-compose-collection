@@ -1,4 +1,4 @@
-- pipeline.id: "approval"
-  path.config: "/usr/share/logstash/pipeline/approval.conf"
+# - pipeline.id: "approval"
+#   path.config: "/usr/share/logstash/pipeline/approval.conf"
 - pipeline.id: "password-update-remind"
   path.config: "/usr/share/logstash/pipeline/password-update-remind.conf"
