@@ -34,7 +34,20 @@ services:
       - kafka_data:/var/lib/kafka/data
     restart: always
 
+  rabbitmq:
+    image: rabbitmq:3-management
+    container_name: rabbitmq
+    ports:
+      - "15672:15672" 
+      - "5672:5672"    # RabbitMQ default AMQP protocol port
+    environment:
+      RABBITMQ_DEFAULT_USER: admin       # 默认用户名
+      RABBITMQ_DEFAULT_PASS: admin   # 默认密码
+    volumes:
+      - rabbitmq_data:/var/lib/rabbitmq   # 持久化存储 RabbitMQ 数据
+
 volumes:
   zk_data:
   kafka_data:
+  rabbitmq_data: 
 
