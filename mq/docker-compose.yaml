@@ -16,7 +16,6 @@ services:
       interval: 30s
       timeout: 10s
       retries: 5
-
   kafka:
     image: 'bitnami/kafka:3.6.2'
     container_name: kafka
@@ -46,8 +45,63 @@ services:
     volumes:
       - rabbitmq_data:/var/lib/rabbitmq   # 持久化存储 RabbitMQ 数据
 
+  rmqnamesrv:
+    image: apache/rocketmq:5.3.1
+    container_name: rmqnamesrv
+    ports:
+      - 9876:9876
+    networks:
+      - rocketmq
+    command: sh mqnamesrv
+  rmqbroker:
+    image: apache/rocketmq:5.3.1
+    container_name: rmqbroker
+    ports:
+      - 10909:10909
+      - 10911:10911
+      - 10912:10912
+    environment:
+      - NAMESRV_ADDR=rmqnamesrv:9876
+    depends_on:
+      - rmqnamesrv
+    networks:
+      - rocketmq
+    command: sh mqbroker
+  rmqproxy:
+    image: apache/rocketmq:5.3.1
+    container_name: rmqproxy
+    networks:
+      - rocketmq
+    depends_on:
+      - rmqbroker
+      - rmqnamesrv
+    ports:
+      - 8082:8080
+      - 8081:8081
+    restart: on-failure
+    environment:
+      - NAMESRV_ADDR=rmqnamesrv:9876
+    command: sh mqproxy
+  rmqdashboard:
+    image: apacherocketmq/rocketmq-dashboard:latest
+    container_name: rmqdashboard
+    environment:
+      - "JAVA_OPTS=-Drocketmq.namesrv.addr=rmqnamesrv:9876"
+    ports:
+      - "8080:8080"
+    networks:
+      - rocketmq
+    depends_on:
+      - rmqnamesrv
+      - rmqbroker
+  
+networks:
+  rocketmq:
+    driver: bridge
+
 volumes:
   zk_data:
   kafka_data:
   rabbitmq_data: 
+  rocketmq_data: 
 
