@@ -5,10 +5,10 @@
 ```bash
 # install kafka
 # -d 表示分离模式，会使容器在后台运行，而不是将容器的输出直接显示在终端中
-docker-compose -f mq/docker-compose.yml up -d
+docker-compose -f mq/docker-compose.yaml up -d
 
 # install es、logstash、kibana
-docker-compose -f elk/docker-compose.yml up -d
+docker-compose -f elk/docker-compose.yaml up -d
 
 # 等等
 ```
