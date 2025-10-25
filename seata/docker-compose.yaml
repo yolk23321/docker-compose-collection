@@ -1,0 +1,15 @@
+version: "3.1"
+services:
+  seata-server:
+    container_name: seata-server
+    image: apache/seata-server:latest
+    ports:
+      - "7091:7091"
+      - "8091:8091"
+    environment:
+      - STORE_MODE=db
+      - SEATA_PORT=8091
+      - TZ=Asia/Shanghai
+    volumes:
+      - "./resources:/seata-server/resources"
+      - "./resources/jdbc/mysql-connector-j-8.0.32.jar:/seata-server/libs/mysql-connector-j-8.0.32.jar"

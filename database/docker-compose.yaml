@@ -28,9 +28,8 @@ services:
     ports:
       - "5432:5432"
     environment:
-      POSTGRES_DB: authing-server
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: postgres
+      POSTGRES_USER: yolk
+      POSTGRES_PASSWORD: password
     volumes:
       - postgres_data:/var/lib/postgresql/data
 

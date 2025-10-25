@@ -33,17 +33,17 @@ services:
       - kafka_data:/var/lib/kafka/data
     restart: always
 
-  rabbitmq:
-    image: rabbitmq:3-management
-    container_name: rabbitmq
-    ports:
-      - "15672:15672" 
-      - "5672:5672"    # RabbitMQ default AMQP protocol port
-    environment:
-      RABBITMQ_DEFAULT_USER: admin       # 默认用户名
-      RABBITMQ_DEFAULT_PASS: admin   # 默认密码
-    volumes:
-      - rabbitmq_data:/var/lib/rabbitmq   # 持久化存储 RabbitMQ 数据
+  # rabbitmq:
+  #   image: rabbitmq:3-management
+  #   container_name: rabbitmq
+  #   ports:
+  #     - "15672:15672" 
+  #     - "5672:5672"    # RabbitMQ default AMQP protocol port
+  #   environment:
+  #     RABBITMQ_DEFAULT_USER: admin       # 默认用户名
+  #     RABBITMQ_DEFAULT_PASS: admin   # 默认密码
+  #   volumes:
+  #     - rabbitmq_data:/var/lib/rabbitmq   # 持久化存储 RabbitMQ 数据
 
   # # 5.x
   # namesrv:
@@ -96,51 +96,51 @@ services:
   #     - namesrv
   #     - broker
   
-  # # 4.x
-  namesrv:
-    image: apache/rocketmq:4.9.4
-    container_name: rmq-namesrv
-    ports:
-      - "9876:9876"
-    environment:
-      - JAVA_OPT_EXT=-Xms512m -Xmx512m -Xmn256m
-    command: sh mqnamesrv
-    volumes:
-      - ./logs/namesrv:/home/rocketmq/logs
-      - ./store/namesrv:/home/rocketmq/store
+# # 4.x
+#   namesrv:
+#     image: apache/rocketmq:4.9.4
+#     container_name: rmq-namesrv
+#     ports:
+#       - "9876:9876"
+#     environment:
+#       - JAVA_OPT_EXT=-Xms512m -Xmx512m -Xmn256m
+#     command: sh mqnamesrv
+#     volumes:
+#       - ./logs/namesrv:/home/rocketmq/logs
+#       - ./store/namesrv:/home/rocketmq/store
 
-  broker:
-    image: apache/rocketmq:4.9.4
-    container_name: rmq-broker
-    ports:
-      - "10911:10911"
-      - "10909:10909"
-    environment:
-      - NAMESRV_ADDR=namesrv:9876
-      - JAVA_OPT_EXT=-Xms512m -Xmx512m -Xmn256m
-    depends_on:
-      - namesrv
-    command: sh mqbroker -c /opt/rocketmq-4.9.4/conf/broker.conf
-    volumes:
-      - ./logs/broker:/home/rocketmq/logs
-      - ./store/broker:/home/rocketmq/store
-      - ./conf/broker.conf:/opt/rocketmq-4.9.4/conf/broker.conf
-  dashboard:
-    image: apacherocketmq/rocketmq-dashboard:1.0.0
-    container_name: rmq-dashboard
-    ports:
-      - "8080:8080"
-    environment:
-      - JAVA_OPTS=-Drocketmq.namesrv.addr=namesrv:9876
-    depends_on:
-      - namesrv
-networks:
-  rocketmq:
-    driver: bridge
+#   broker:
+#     image: apache/rocketmq:4.9.4
+#     container_name: rmq-broker
+#     ports:
+#       - "10911:10911"
+#       - "10909:10909"
+#     environment:
+#       - NAMESRV_ADDR=namesrv:9876
+#       - JAVA_OPT_EXT=-Xms512m -Xmx512m -Xmn256m
+#     depends_on:
+#       - namesrv
+#     command: sh mqbroker -c /opt/rocketmq-4.9.4/conf/broker.conf
+#     volumes:
+#       - ./logs/broker:/home/rocketmq/logs
+#       - ./store/broker:/home/rocketmq/store
+#       - ./conf/broker.conf:/opt/rocketmq-4.9.4/conf/broker.conf
+#   dashboard:
+#     image: apacherocketmq/rocketmq-dashboard:1.0.0
+#     container_name: rmq-dashboard
+#     ports:
+#       - "8080:8080"
+#     environment:
+#       - JAVA_OPTS=-Drocketmq.namesrv.addr=namesrv:9876
+#     depends_on:
+#       - namesrv
+# networks:
+#   rocketmq:
+#     driver: bridge
 
 volumes:
   zk_data:
   kafka_data:
-  rabbitmq_data: 
-  rocketmq_data: 
+  # rabbitmq_data: 
+  # rocketmq_data: 
 

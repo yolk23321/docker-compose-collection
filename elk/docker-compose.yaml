@@ -18,7 +18,8 @@ services:
     image: logstash:7.17.28
     container_name: logstash
     volumes:
-      - /Users/huangqiang/code/idea/company/authing/authing-security-platform/audit_log:/logstash/input
+      # Mount the custom input directory
+      - ./logstash-input:/logstash/input
       - ./approval-pipeline.conf:/usr/share/logstash/pipeline/approval.conf
       - ./logstash-pipelines.yaml:/usr/share/logstash/config/pipelines.yml
     depends_on:
